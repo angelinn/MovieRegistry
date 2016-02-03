@@ -1,4 +1,5 @@
-require_relative 'series'
+require_relative 'entities/series.rb'
+
 
 class MovieRegistry
   attr_reader :movies
@@ -7,7 +8,7 @@ class MovieRegistry
     @movies = []
   end
 
-  def add_movie(movie)
+  def add_movie(title)
     @movies << movie
   end
 end
