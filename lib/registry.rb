@@ -13,5 +13,8 @@ class MovieRegistry
     movie = Movie.new(title, 2016, Date.today)
     @movies << movie
   end
+
+  def check_for_new
+  end
 end
 

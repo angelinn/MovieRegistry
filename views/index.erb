@@ -1,6 +1,17 @@
-<h2> Hello </h2>
+<h1> Hi</h1>
 
-<form action="/movie" method="post">
-  <input type="text" name="message">
-  <input type="submit">
+<h2> New Episodes: </h2>
+
+<hr />
+
+<h4> Add Movie: </h4>
+
+
+<form action="/post" method="post" class="form-horizontal">
+  <div class="form-group">
+    <div class="col-md-3">
+      <input type="text" name="movie_name" class="form-control" />
+    </div>
+  </div>
+  <button type="submit" class="btn btn-blank col-md-offset-6">Advance!</button>
 </form>
