@@ -1,5 +1,6 @@
-require_relative 'entities/series.rb'
+require 'date'
 
+require_relative 'entities/series.rb'
 
 class MovieRegistry
   attr_reader :movies
@@ -9,6 +10,7 @@ class MovieRegistry
   end
 
   def add_movie(title)
+    movie = Movie.new(title, 2016, Date.today)
     @movies << movie
   end
 end
