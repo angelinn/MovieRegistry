@@ -1,7 +1,8 @@
 require 'active_record'
 
 Dir.glob('./db/entities/*.rb').each do |file|
-  require file
+  require_relative file
+  puts 'requiring ' + file
 end
 
 ActiveRecord::Base.establish_connection(

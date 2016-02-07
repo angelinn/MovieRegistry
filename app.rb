@@ -6,18 +6,6 @@ require_relative './lib/imdb_manager'
 require_relative './lib/registry'
 
 
-class CreateTables < ActiveRecord::Migration
-  def change
-    create_table :ideas do |t|
-      t.string :description
-    end
-
-    create_table
-  end
-end
-
-
-
 get '/' do
   redirect '/login'
 end

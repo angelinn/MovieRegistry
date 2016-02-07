@@ -3,7 +3,7 @@ require_relative '../../environment'
 class CreateMovieTable < ActiveRecord::Migration
 
   def up
-    create_table :movie do |t|
+    create_table :movies do |t|
       t.string  :title
       t.integer :year
       t.datetime :seen_at
@@ -12,7 +12,7 @@ class CreateMovieTable < ActiveRecord::Migration
   end
 
   def down
-    drop_table :movie
+    drop_table :movies
     puts 'ran down method'
   end
 
