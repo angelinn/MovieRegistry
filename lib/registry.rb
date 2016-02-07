@@ -12,9 +12,7 @@ class MovieRegistry
   end
 
   def add_user(name)
-    user = User.new
-    user.name = name
-    user.save!
+    user = User.create(name: name)
   end
 
   def add(id)
@@ -32,7 +30,7 @@ class MovieRegistry
   end
 
   def latest
-    Movie.all.take(5)
+    Movie.all
   end
 
   def is_series?(movie)
