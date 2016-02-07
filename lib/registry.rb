@@ -7,21 +7,17 @@ class MovieRegistry
   attr_reader :name
 
   def initialize(name)
-    @name = name
-    add_user(name)
+    @user = add_user(name)
   end
 
   def add_user(name)
-    user = User.create(name: name)
+    user = User.where(name: name).size > 0 || User.create(name: name)
   end
 
   def add(id)
     movie = MovieDb::ImdbManager.get_by_id(id)
 
-    entity = is_series?(movie) ? Series.new : Movie.new
-    entity.title = movie.title
-    entity.year = movie.year
-    entity.save!
+    entity = Movie.create(title: movie.title[1..-2], year: movie.year, user: @user)
 
     movie
   end

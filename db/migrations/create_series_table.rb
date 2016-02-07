@@ -4,11 +4,9 @@ class CreateSeriesTable < ActiveRecord::Migration
 
   def up
     create_table :series do |t|
-      t.string  :title
-      t.integer :year
+      t.belongs_to :movie, index: true
       t.integer :season
       t.integer :episode
-      t.datetime :seen_at
     end
     puts 'ran up method'
   end

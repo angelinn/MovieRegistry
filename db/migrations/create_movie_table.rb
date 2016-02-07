@@ -4,6 +4,7 @@ class CreateMovieTable < ActiveRecord::Migration
 
   def up
     create_table :movies do |t|
+      t.belongs_to :user, index: true
       t.string  :title
       t.integer :year
       t.datetime :seen_at
