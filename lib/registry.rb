@@ -11,7 +11,7 @@ class MovieRegistry
   end
 
   def add_user(name)
-    user = User.where(name: name).size > 0 || User.create(name: name)
+    user = User.where(name: name).empty? ? User.create(name: name) : User.where(name: name)
   end
 
   def add(id)
@@ -26,7 +26,7 @@ class MovieRegistry
   end
 
   def latest
-    Movie.all
+    Movie.all.take(5)
   end
 
   def is_series?(movie)
