@@ -1,7 +1,8 @@
 require 'sinatra'
+require 'sinatra/cookies'
 require 'active_record'
-require 'imdb'
 
+require_relative './lib/imdb_manager'
 require_relative './lib/registry'
 
 # ActiveRecord::Base.establish_connection(
@@ -14,7 +15,7 @@ get '/' do
 end
 
 get '/index' do
-  erb :index, :locals => { :username => @username }
+  erb :index, :locals => { :username => cookies[:username] }
 end
 
 get '/login' do
@@ -26,18 +27,17 @@ get '/about' do
 end
 
 post '/query' do
-  query = Imdb::Search.new(params[:movie_name])
-  p query.movies.size
+  query = MovieDb::ImdbManager.get_by_name(params[:movie_name])
   erb :query, :locals => { :movies => query.movies.take(10) }
 end
 
 post '/login' do
-  @username = params[:username]
+  cookies[:username] = params[:username]
   redirect '/index'
 end
 
 get '/add' do
-  registry = MovieRegistry.new
+  registry = MovieRegistry.new(cookies[:username])
   m = registry.add_movie(params[:id])
   erb :added, :locals => { :movie => m }
 end

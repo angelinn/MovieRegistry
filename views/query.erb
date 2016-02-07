@@ -1,5 +1,5 @@
 <h2> Results: </h2>
 
-<% movies.each_with_index do |movie, i| %>
+<% movies.each do |movie| %>
   <a href="/add?id=<%= movie.id %>"><%= movie.title %> </a><br />
 <% end %>
