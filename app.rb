@@ -1,21 +1,32 @@
 require 'sinatra'
 require 'sinatra/cookies'
-require 'active_record'
+
 
 require_relative './lib/imdb_manager'
 require_relative './lib/registry'
 
-# ActiveRecord::Base.establish_connection(
-#   :adapter => 'sqlite3',
-#   :database =>  'movie_registry.sqlite3.db'
-# )
+
+class CreateTables < ActiveRecord::Migration
+  def change
+    create_table :ideas do |t|
+      t.string :description
+    end
+
+    create_table
+  end
+end
+
+
 
 get '/' do
   redirect '/login'
 end
 
 get '/index' do
-  erb :index, :locals => { :username => cookies[:username] }
+  erb :index, :locals => {
+    :username => cookies[:username],
+    :latest   => MovieRegistry.new(cookies[:username]).latest
+  }
 end
 
 get '/login' do
@@ -38,7 +49,7 @@ end
 
 get '/add' do
   registry = MovieRegistry.new(cookies[:username])
-  m = registry.add_movie(params[:id])
+  m = registry.add(params[:id])
   erb :added, :locals => { :movie => m }
 end
 

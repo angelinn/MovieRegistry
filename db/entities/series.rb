@@ -1,12 +1,5 @@
-require_relative 'movie'
+require 'active_record'
 
-class Series < Movie
-  def initialize(title, year, episode)
-    super(title, year)
-    @episode = episode
-  end
-
-  def to_s
-    "#{@title}, #{@year}, #{@episode}"
-  end
+class Series < ActiveRecord::Base
+  attr_reader :title, :year, :episode, :season
 end
