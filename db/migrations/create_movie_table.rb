@@ -7,6 +7,7 @@ class CreateMovieTable < ActiveRecord::Migration
       t.belongs_to :user, index: true
       t.string  :title
       t.integer :year
+      t.integer :imdb_id
       t.datetime :seen_at
     end
     puts 'ran up method'

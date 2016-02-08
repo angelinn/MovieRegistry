@@ -28,7 +28,7 @@ end
 
 get '/movie' do
   movie = MovieDb::ImdbManager.get_by_id(params[:id])
-  erb :movie, :locals => { :movie => movie }
+  erb :movie, :locals => { :movie => movie, :series => params[:series] }
 end
 
 post '/query' do
@@ -41,7 +41,7 @@ post '/login' do
   redirect '/index'
 end
 
-get '/add' do
+post '/add' do
   registry = MovieRegistry.new(cookies[:username])
   m = registry.add(params[:id], params[:series])
   erb :added, :locals => { :movie => m }

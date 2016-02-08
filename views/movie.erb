@@ -1,5 +1,5 @@
 <h1>
-  <%= movie.title %> <%= movie.year %>
+  <%= movie.title %> (<%= movie.year %>)
 </h1>
 <hr />
 
@@ -10,7 +10,7 @@
   <div class="col-md-6">
     <table>
       <tr>
-        <td><h4>Length: <%= movie.length %></h4>   </td>
+        <td><h4>Length: <%= movie.length %> minutes</h4>   </td>
       </tr>
       <tr>
         <td><h4>Languages: <%= movie.languages.join(', ') %> </h4></td>
@@ -20,13 +20,18 @@
       </tr>
       <tr> <td> <br /> </td></tr>
       <tr>
-        <td><h4>Add movie to registry:</h4></td>
-      </tr>
-      <tr>
-        <td><input type="text" placeholder="seen at" /></td>
-      </tr>
-      <tr>
-        <td><button>Submit</button></td>
+        <td>
+        <h4>Add movie to registry:</h4>
+        <form action="/add" method="post" class="form-vertical">
+          <div class="form-group col-md-10">
+            <input type="text" placeholder="seen at" name="seen_at" class="form-control" />
+          </div>
+          <input type="hidden" name="id" value="<%= movie.id %>" />
+          <input type="hidden" name="series" value="<%= series %>" />
+
+          <button type="submit" class="btn btn-blank">Submit</button>
+        </form>
+        </td>
       </tr>
     </table>
   </div>
