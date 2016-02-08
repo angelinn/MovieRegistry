@@ -14,11 +14,11 @@ class MovieRegistry
     user = User.where(name: name).first || User.create(name: name)
   end
 
-  def add(id)
+  def add(id, series=false, season=nil, episode=nil)
     movie = MovieDb::ImdbManager.get_by_id(id)
 
     entity = Movie.create(title: movie.title[1..-2], year: movie.year, user: @user)
-
+    Serie.create(season: season, episode: episode, movie: entity) if series
     movie
   end
 
@@ -26,11 +26,7 @@ class MovieRegistry
   end
 
   def latest
-    Movie.where(user: @user).take(5)
-  end
-
-  def is_series?(movie)
-    movie.title.include?('TV Series')
+    Movie.where(user: @user).last(5)
   end
 end
 

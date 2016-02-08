@@ -16,6 +16,6 @@
   <button type="submit" class="btn btn-blank col-md-offset-6">Advance!</button>
 </form>
 
-<% latest.each do |movie| %>
+<% latest.reverse.each do |movie| %>
 <%= movie.title %> (<%= movie.year %>) <br />
 <% end %>
