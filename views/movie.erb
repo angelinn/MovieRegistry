@@ -1,0 +1,35 @@
+<h1>
+  <%= movie.title %> <%= movie.year %>
+</h1>
+<hr />
+
+<div class="row">
+  <div class="col-md-3">
+    <img src="<%=movie.poster%>" height="90%" width="90%"/>
+  </div>
+  <div class="col-md-6">
+    <table>
+      <tr>
+        <td><h4>Length: <%= movie.length %></h4>   </td>
+      </tr>
+      <tr>
+        <td><h4>Languages: <%= movie.languages.join(', ') %> </h4></td>
+      </tr>
+      <tr>
+        <td><h4>Genres: <%= movie.genres.join(', ') %></h4></td>
+      </tr>
+      <tr> <td> <br /> </td></tr>
+      <tr>
+        <td><h4>Add movie to registry:</h4></td>
+      </tr>
+      <tr>
+        <td><input type="text" placeholder="seen at" /></td>
+      </tr>
+      <tr>
+        <td><button>Submit</button></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<h4><%= movie.plot %></h4>
