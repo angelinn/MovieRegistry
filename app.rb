@@ -12,8 +12,9 @@ end
 
 get '/index' do
   erb :index, :locals => {
-    :username => cookies[:username],
-    :latest   => MovieRegistry.new(cookies[:username]).latest
+    :username     => cookies[:username],
+    :latest       => MovieRegistry.new(cookies[:username]).latest,
+    :new_episodes => MovieRegistry.new(cookies[:username]).check_for_new
   }
 end
 
@@ -23,6 +24,11 @@ end
 
 get '/about' do
   status 404
+end
+
+get '/movie' do
+  movie = MovieDb::ImdbManager.get_by_id(params[:id])
+  erb :movie, :locals => { :movie => movie }
 end
 
 post '/query' do

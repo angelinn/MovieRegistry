@@ -23,6 +23,7 @@ class MovieRegistry
   end
 
   def check_for_new
+    []
   end
 
   def latest
