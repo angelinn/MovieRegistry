@@ -1,6 +1,6 @@
 require 'active_record'
 
-Dir.glob('./db/entities/*.rb').each do |file|
+Dir.glob('%s/db/entities/*.rb' % Dir.pwd).each do |file|
   require_relative file
   puts 'requiring ' + file
 end
