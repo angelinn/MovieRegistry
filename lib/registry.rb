@@ -1,7 +1,7 @@
 require 'date'
 
 require_relative 'imdb_manager'
-require_relative '../environment'
+require_relative '../config/environment'
 require_relative 'episode_manager'
 
 class MovieRegistry
