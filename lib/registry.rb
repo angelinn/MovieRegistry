@@ -11,12 +11,12 @@ class MovieRegistry
     @user = add_user(name)
   end
 
-  def add(id, seen_at, series=false, season=nil, episode=nil)
+  def add(id, seen_at, series, season=nil, episode=nil)
     movie = MovieDb::ImdbManager.get_by_id(id)
     seen_at = seen_at != '' ? Date.parse(seen_at) : Date.parse(Time.now.to_s)
 
     entity = create_movie(movie, seen_at)
-    create_series(season, episode, entity) if series
+    create_series(season, episode, entity) if series == 'true'
 
     movie
   end
