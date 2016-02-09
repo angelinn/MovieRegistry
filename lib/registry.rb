@@ -14,10 +14,11 @@ class MovieRegistry
     user = User.where(name: name).first || User.create(name: name)
   end
 
-  def add(id, series=false, seen_at=Date.new, season=nil, episode=nil)
+  def add(id, series=false, seen_at=nil, season=nil, episode=nil)
     movie = MovieDb::ImdbManager.get_by_id(id)
+    seen_at = seen_at != '' ? Date.parse(seen_at) : Date.parse(Time.now.to_s)
 
-    entity = Movie.create(title: movie.title[1..-2], year: movie.year, user: @user, seen_at: seen_at, imdb_id: id)
+    entity = Movie.create(title: movie.title[1..-2], year: movie.year, user: @user, seen_at: seen_at.to_s, imdb_id: id)
     Serie.create(season: season, episode: episode, movie: entity) if series
     movie
   end

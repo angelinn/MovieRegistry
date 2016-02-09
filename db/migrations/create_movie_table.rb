@@ -8,7 +8,7 @@ class CreateMovieTable < ActiveRecord::Migration
       t.string  :title
       t.integer :year
       t.integer :imdb_id
-      t.datetime :seen_at
+      t.string :seen_at
     end
     puts 'ran up method'
   end
