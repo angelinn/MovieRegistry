@@ -24,7 +24,7 @@
         <form action="/add" method="post" class="form-vertical">
         <h4>Add movie to registry:</h4>
           <div class="form-group col-md-7">
-            <input type="text" placeholder="YYYY-MM-DD" name="seen_at" class="form-control" />
+            <input type="text" value="<%= Date.parse(Time.now.to_s).to_s %>" name="seen_at" class="form-control" />
           </div>
           <% if series == 'true' %>
           <div class="form-group col-md-7">
