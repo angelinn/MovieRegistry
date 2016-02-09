@@ -1,15 +1,16 @@
-require 'httparty'
+require 'tvdb_party'
 
 module Episode
   class Manager
-    API_URL = 'http://imdbapi.poromenos.org/json/?name=%s'
+    API_KEY = '51AEE5CAE610F84E'
 
-    def all(title)
-      response = HTTParty.get(API_URL % title)
-      parsed = JSON.parse(response.body)
+    def initialize(title)
+      @tvdb = TvdbParty::Search.new(API_KEY)
+      @series = @tvdb.get_series_by_id(@tvdb.search(title).first['seriesid'])
+    end
 
-      @episodes = parsed[parsed.keys.first]['episodes']
-      @episodes.map! { |ep| Epi.new(ep['name'], ep['season'], ep['number']) }
+    def all
+      @tvdb.get_all_episodes(@series)
     end
   end
 
