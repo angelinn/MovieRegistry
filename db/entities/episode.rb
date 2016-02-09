@@ -1,5 +1,5 @@
 require 'active_record'
 
-class Serie < ActiveRecord::Base
+class Episode < ActiveRecord::Base
   belongs_to :movie
 end

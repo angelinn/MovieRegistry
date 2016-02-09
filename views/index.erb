@@ -6,7 +6,8 @@
 <% else %>
   <h2> New Episodes: </h2>
   <% new_episodes.each do |episode| %>
-  <%= episode.number %>
+  <%= episode.name %> [<%= episode.number %>]
+  <br />
   <% end %>
 <% end %>
 

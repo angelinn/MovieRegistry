@@ -2,6 +2,7 @@ require 'date'
 
 require_relative 'imdb_manager'
 require_relative '../environment'
+require_relative 'episode_manager'
 
 class MovieRegistry
   attr_reader :name
@@ -21,7 +22,11 @@ class MovieRegistry
   end
 
   def check_for_new
-    []
+    series = @user.movies.select { |m| not m.episodes.empty? }
+    series.map do |s|
+      last = s.episodes.last
+      Episodes::Manager.new(s.title).check_for_new(last.season, last.episode)
+    end.flatten
   end
 
   def latest
@@ -41,7 +46,7 @@ class MovieRegistry
   end
 
   def create_series(season, episode, movie)
-    Serie.create(season: season, episode: episode, movie: movie)
+    Episode.create(season: season, episode: episode, movie: movie)
   end
 end
 

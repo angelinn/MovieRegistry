@@ -1,9 +1,9 @@
 require_relative '../../environment'
 
-class CreateSeriesTable < ActiveRecord::Migration
+class CreateEpisodesTable < ActiveRecord::Migration
 
   def up
-    create_table :series do |t|
+    create_table :episodes do |t|
       t.belongs_to :movie, index: true
       t.integer :season
       t.integer :episode
@@ -12,10 +12,10 @@ class CreateSeriesTable < ActiveRecord::Migration
   end
 
   def down
-    drop_table :series
+    drop_table :episodes
     puts 'ran down method'
   end
 
 end
 
-CreateSeriesTable.migrate(ARGV[0])
+CreateEpisodesTable.migrate(ARGV[0])
