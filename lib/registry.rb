@@ -10,16 +10,13 @@ class MovieRegistry
     @user = add_user(name)
   end
 
-  def add_user(name)
-    user = User.where(name: name).first || User.create(name: name)
-  end
-
-  def add(id, series=false, seen_at=nil, season=nil, episode=nil)
+  def add(id, seen_at, series=false, season=nil, episode=nil)
     movie = MovieDb::ImdbManager.get_by_id(id)
     seen_at = seen_at != '' ? Date.parse(seen_at) : Date.parse(Time.now.to_s)
 
-    entity = Movie.create(title: movie.title[1..-2], year: movie.year, user: @user, seen_at: seen_at.to_s, imdb_id: id)
-    Serie.create(season: season, episode: episode, movie: entity) if series
+    entity = create_movie(movie, seen_at)
+    create_series(season, episode, entity) if series
+
     movie
   end
 
@@ -28,7 +25,23 @@ class MovieRegistry
   end
 
   def latest
-    Movie.where(user: @user).last(5)
+    @user.movies.last(5)
+  end
+
+  private
+  def add_user(name)
+    user = User.where(name: name).first || User.create(name: name)
+  end
+
+  def create_movie(movie, seen_at)
+    title = movie.title.include?('"') ? movie.title[1..-2] : movie.title
+
+    Movie.create(title: title, year: movie.year,
+                 user: @user, seen_at: seen_at.to_s, imdb_id: movie.id)
+  end
+
+  def create_series(season, episode, movie)
+    Serie.create(season: season, episode: episode, movie: movie)
   end
 end
 

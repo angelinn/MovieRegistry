@@ -21,11 +21,19 @@
       <tr> <td> <br /> </td></tr>
       <tr>
         <td>
-        <h4>Add movie to registry:</h4>
         <form action="/add" method="post" class="form-vertical">
-          <div class="form-group col-md-10">
-            <input type="text" placeholder="seen at" name="seen_at" class="form-control" />
+        <h4>Add movie to registry:</h4>
+          <div class="form-group col-md-7">
+            <input type="text" placeholder="YYYY-MM-DD" name="seen_at" class="form-control" />
           </div>
+          <% if series == 'true' %>
+          <div class="form-group col-md-7">
+            <input type="text" placeholder="Season" name="season" class="form-control" />
+          </div>
+          <div class="form-group col-md-7">
+            <input type="text" placeholder="Episode" name="episode" class="form-control" />
+          </div>
+          <% end %>
           <input type="hidden" name="id" value="<%= movie.id %>" />
           <input type="hidden" name="series" value="<%= series %>" />
 
@@ -37,4 +45,5 @@
   </div>
 </div>
 
+<hr />
 <h4><%= movie.plot %></h4>

@@ -43,7 +43,7 @@ end
 
 post '/add' do
   registry = MovieRegistry.new(cookies[:username])
-  m = registry.add(params[:id], params[:series], params[:seen_at] )
+  m = registry.add(params[:id], params[:seen_at], params[:series])
   erb :added, :locals => { :movie => m }
 end
 
