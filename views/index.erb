@@ -5,9 +5,18 @@
   <h2> There are no new episodes! </h2>
 <% else %>
   <h2> New Episodes: </h2>
-  <% new_episodes.each do |episode| %>
-  <%= episode.name %> [<%= episode.number %>]
-  <br />
+  <% new_episodes.each do |serie| %>
+    <% serie[:new_episodes].each do |episode| %>
+      <span style="color: red; font-weight: bold">
+        <%= serie[:title] %>
+      </span>
+
+      - <%= episode.name %>
+
+      [<%= episode.season_number %>E<%= episode.number %>]
+      <span style="color: green; font-weight: bold">*new*</span>
+      <br />
+    <% end %>
   <% end %>
 <% end %>
 

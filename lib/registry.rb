@@ -25,8 +25,8 @@ class MovieRegistry
     series = @user.movies.select { |m| not m.episodes.empty? }
     series.map do |s|
       last = s.episodes.last
-      Episodes::Manager.new(s.title).check_for_new(last.season, last.episode)
-    end.flatten
+      Episodes::Manager.new(s.title, s.imdb_id).check_for_new(last.season, last.episode)
+    end
   end
 
   def latest
@@ -42,7 +42,7 @@ class MovieRegistry
     title = movie.title.include?('"') ? movie.title[1..-2] : movie.title
 
     Movie.create(title: title, year: movie.year,
-                 user: @user, seen_at: seen_at.to_s, imdb_id: movie.id)
+                 user: @user, seen_at: seen_at.to_s, imdb_id: 'tt' + movie.id)
   end
 
   def create_series(season, episode, movie)
