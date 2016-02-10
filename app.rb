@@ -5,6 +5,10 @@ require 'sinatra/cookies'
 require_relative './lib/imdb_manager'
 require_relative './lib/registry'
 
+not_found do
+  status 404
+  erb :oops
+end
 
 get '/' do
   redirect '/login'
@@ -20,10 +24,6 @@ end
 
 get '/login' do
   erb :login
-end
-
-get '/about' do
-  status 404
 end
 
 get '/movie' do
@@ -43,7 +43,10 @@ end
 
 post '/add' do
   registry = MovieRegistry.new(cookies[:username])
-  m = registry.add_movie(params[:id], params[:seen_at], params[:series], params[:season], params[:episode])
+  m = registry.add_movie(params[:id], params[:seen_at],
+                         params[:series], params[:season],
+                         params[:episode])
+
   return redirect back unless m
   erb :added, :locals => { :movie => m }
 end
