@@ -23,9 +23,13 @@ module Episodes
       ]
     end
 
+    def exists?(season, number)
+      all.select { |e| e.season_number == season and e.number == number }.first
+    end
+
     private
     def all
-     @tvdb.get_all_episodes(@series)
+      @tvdb.get_all_episodes(@series)
     end
 
     def has_finished?(season, number)

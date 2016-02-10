@@ -11,14 +11,12 @@ class MovieRegistry
     @user = add_user(name)
   end
 
-  def add(id, seen_at, series, season=nil, episode=nil)
+  def add_movie(id, seen_at, series, season=nil, episode=nil)
     movie = MovieDb::ImdbManager.get_by_id(id)
     seen_at = seen_at != '' ? Date.parse(seen_at) : Date.parse(Time.now.to_s)
 
-    entity = create_movie(movie, seen_at)
-    create_series(season, episode, entity) if series == 'true'
-
-    movie
+    return nil if series == 'true' and not episode_exists?(movie.title, 'tt' + id, season, episode)
+    add(movie, seen_at, series, season, episode)
   end
 
   def check_for_new
@@ -38,6 +36,13 @@ class MovieRegistry
     user = User.where(name: name).first || User.create(name: name)
   end
 
+  def add(movie, seen_at, series, season=nil, episode=nil)
+    entity = create_movie(movie, seen_at)
+    create_series(season, episode, entity) if series == 'true'
+
+    movie
+  end
+
   def create_movie(movie, seen_at)
     title = movie.title.include?('"') ? movie.title[1..-2] : movie.title
 
@@ -47,6 +52,10 @@ class MovieRegistry
 
   def create_series(season, episode, movie)
     Episode.create(season: season, episode: episode, movie: movie)
+  end
+
+  def episode_exists?(title, id, season, number)
+    Episodes::Manager.new(title, id).exists?(season, number)
   end
 end
 
