@@ -43,11 +43,11 @@ end
 
 post '/add' do
   registry = MovieRegistry.new(cookies[:username])
-  m = registry.add_movie(params[:id], params[:seen_at],
+  movie = registry.add_movie(params[:id], params[:seen_at],
                          params[:series], params[:season],
                          params[:episode])
 
-  return redirect back unless m
-  erb :added, :locals => { :movie => m }
+  return redirect back unless movie
+  erb :added, :locals => { :movie => movie }
 end
 

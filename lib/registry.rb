@@ -56,7 +56,8 @@ class MovieRegistry
   end
 
   def create_series(season, episode, movie)
-    Episode.create(season: season, episode: episode, movie: movie)
+    Episode.find_by(season: season, episode: episode, movie_id: movie.id) ||
+      Episode.create(season: season, episode: episode, movie: movie)
   end
 
   def episode_exists?(title, id, season, number)
