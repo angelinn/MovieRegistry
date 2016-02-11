@@ -1,7 +1,7 @@
 require 'active_record'
 
 class Record < ActiveRecord::Base
-  has_one :user
-  has_one :movie
-  has_one :episode
+  belongs_to :user
+  belongs_to :movie
+  belongs_to :episode
 end

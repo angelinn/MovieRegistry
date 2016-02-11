@@ -47,8 +47,8 @@
     <% end %>
 
     <br />
-    <% latest[:movies].reverse.each do |movie| %>
-    <%= movie.title %> (<%= movie.year %>) <br />
+    <% latest[:movies].reverse.each do |record| %>
+    <%= record.movie.title %> (<%= record.movie.year %>) <br />
     <% end %>
   </div>
 
@@ -60,9 +60,9 @@
     <% end %>
 
     <br />
-    <% latest[:episodes].reverse.each do |episode| %>
-    <%= episode.movie.title %> (<%= episode.movie.year %>)
-    [S<%= "%02d" % episode.season %>E<%= "%02d" % episode.episode %>]
+    <% latest[:episodes].reverse.each do |record| %>
+    <%= record.movie.title %> (<%= record.movie.year %>)
+    [S<%= "%02d" % record.episode.season %>E<%= "%02d" % record.episode.episode %>]
     <br />
     <% end %>
   </div>

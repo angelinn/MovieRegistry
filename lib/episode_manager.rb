@@ -7,6 +7,7 @@ module Episodes
 
     def initialize(title, imdb_id)
       @tvdb = TvdbParty::Search.new(API_KEY)
+
       local = @tvdb.search(title).select { |r| r['IMDB_ID'] == imdb_id }.first
       @series = @tvdb.get_series_by_id(local['seriesid'])
     end

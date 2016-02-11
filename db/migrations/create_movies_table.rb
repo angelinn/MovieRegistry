@@ -6,7 +6,7 @@ class CreateMovieTable < ActiveRecord::Migration
     create_table :movies do |t|
       t.string  :title
       t.integer :year
-      t.string :imdb_id
+      t.string  :imdb_id
     end
     puts 'ran up method'
   end

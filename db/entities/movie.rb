@@ -1,5 +1,5 @@
 require 'active_record'
 
 class Movie < ActiveRecord::Base
-  belongs_to :record
+  has_many :records
 end

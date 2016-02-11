@@ -13,7 +13,6 @@ class MovieRegistry
 
   def add_movie(id, seen_at, series, season=nil, episode=nil)
     movie = MovieDb::ImdbManager.get_by_id(id)
-    seen_at = seen_at != '' ? Date.parse(seen_at) : Date.parse(Time.now.to_s)
 
     return nil if series and
       not episode_exists?(movie.title, idfy(id), season, episode)
@@ -22,30 +21,31 @@ class MovieRegistry
   end
 
   def check_for_new
-    series = @user.movies.select { |m| not m.episodes.empty? }
-    series.map do |s|
-      last = s.episodes.last
-      Episodes::Manager.new(s.title, s.imdb_id).
+    series = @user.records.where(is_series: true)
+
+    series.group_by { |s| s.movie_id }.map do |key, values|
+      last = values.last.episode
+      movie = values.first.movie
+      Episodes::Manager.new(movie.title, movie.imdb_id).
         check_for_new(last.season, last.episode)
     end
   end
 
   def latest
-    Hash[:movies => @user.movies.where(is_series: false).last(5),
-         :episodes => Episode.last(5)]
+    Hash[:movies => @user.records.where(is_series: false).last(5),
+         :episodes => @user.records.where(is_series: true).last(5)]
   end
 
   private
   def add_user(name)
-    user = User.find_by(name: name) || User.create(name: name)
+    User.find_by(name: name) || User.create(name: name)
   end
 
   def add(movie, at, series, season=nil, episode=nil)
-    # Do NOT use 'or'
-    entity = Movie.find_by(imdb_id: idfy(movie.id)) ||
-      create_movie(movie, at, series)
+    entity = create_movie(movie, at, series)
+    episode = create_episode(season, episode) if series
 
-    create_series(season, episode, entity) if series
+    create_record(entity, at, episode)
 
     movie
   end
@@ -53,14 +53,21 @@ class MovieRegistry
   def create_movie(movie, seen_at, series)
     title = movie.title.include?('"') ? movie.title[1..-2] : movie.title
 
-    Movie.create(title: title, year: movie.year, user: @user,
-                 seen_at: seen_at.to_s, imdb_id: idfy(movie.id),
-                 is_series: series)
+    Movie.find_by(imdb_id: idfy(movie.id)) ||
+      Movie.create(title: title, year: movie.year, imdb_id: idfy(movie.id))
   end
 
-  def create_series(season, episode, movie)
-    Episode.find_by(season: season, episode: episode, movie_id: movie.id) ||
-      Episode.create(season: season, episode: episode, movie: movie)
+  def create_episode(season, episode)
+    Episode.find_by(season: season, episode: episode) ||
+      Episode.create(season: season, episode: episode)
+  end
+
+  def create_record(movie, seen_at, episode=nil)
+    at = Date.parse(seen_at) rescue Date.parse(Time.now.to_s)
+    id = episode ? episode.id : nil
+
+    Record.find_by(user_id: @user.id, movie_id: movie.id, episode_id: id) ||
+      Record.create(user: @user, movie: movie, episode: episode, is_series: !!episode, seen_at: at.to_s)
   end
 
   def episode_exists?(title, id, season, number)
