@@ -1,7 +1,7 @@
 <h3> Hello, <%= username %> </h3>
 <hr />
 
-<% if new_episodes.empty? %>
+<% if new_episodes.all? { |h| h[:new_episodes].empty? } %>
   <h2> There are no new episodes! </h2>
 <% else %>
   <h2> New Episodes: </h2>

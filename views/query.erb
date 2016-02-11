@@ -1,4 +1,5 @@
-<h2> Results: </h2>
+<h2> Results </h2>
+<hr />
 
 <% movies.each do |movie| %>
   <a href="/movie?id=<%= movie.id %>&series=<%= movie.title.include?('Series') %>"><%= movie.title %> </a><br />
