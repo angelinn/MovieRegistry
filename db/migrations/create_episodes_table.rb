@@ -4,7 +4,6 @@ class CreateEpisodesTable < ActiveRecord::Migration
 
   def up
     create_table :episodes do |t|
-      t.belongs_to :movie, index: true
       t.integer :season
       t.integer :episode
     end

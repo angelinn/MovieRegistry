@@ -5,6 +5,7 @@ namespace :db do
     require_relative 'db/migrations/create_users_table.rb'
     require_relative 'db/migrations/create_movies_table.rb'
     require_relative 'db/migrations/create_episodes_table.rb'
+    require_relative 'db/migrations/create_records_table.rb'
   end
 
   desc "creates databases"
@@ -13,5 +14,6 @@ namespace :db do
     require_relative 'db/migrations/create_users_table.rb'
     require_relative 'db/migrations/create_movies_table.rb'
     require_relative 'db/migrations/create_episodes_table.rb'
+    require_relative 'db/migrations/create_records_table.rb'
   end
 end
