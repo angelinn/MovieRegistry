@@ -38,13 +38,32 @@
 
 
 <hr />
-<% if latest.empty? %>
-  <h4> You haven't seen any movies! </h4>
-<% else %>
-  <h4> Latest movies seen: </h4>
-<% end %>
+<div class="row">
+  <div class="col-md-6">
+    <% if latest[:movies].empty? %>
+      <h4> You haven't seen any movies! </h4>
+    <% else %>
+      <h4> Latest movies seen: </h4>
+    <% end %>
 
-<br />
-<% latest.reverse.each do |movie| %>
-<%= movie.title %> (<%= movie.year %>) <br />
-<% end %>
+    <br />
+    <% latest[:movies].reverse.each do |movie| %>
+    <%= movie.title %> (<%= movie.year %>) <br />
+    <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <% if latest[:episodes].empty? %>
+      <h4> You haven't seen any TV Series! </h4>
+    <% else %>
+      <h4> Latest TV Series seen: </h4>
+    <% end %>
+
+    <br />
+    <% latest[:episodes].reverse.each do |episode| %>
+    <%= episode.movie.title %> (<%= episode.movie.year %>)
+    [S<%= "%02d" % episode.season %>E<%= "%02d" % episode.episode %>]
+    <br />
+    <% end %>
+  </div>
+</div>

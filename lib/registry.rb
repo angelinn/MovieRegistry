@@ -15,7 +15,7 @@ class MovieRegistry
     movie = MovieDb::ImdbManager.get_by_id(id)
     seen_at = seen_at != '' ? Date.parse(seen_at) : Date.parse(Time.now.to_s)
 
-    return nil if series == 'true' and
+    return nil if series and
       not episode_exists?(movie.title, idfy(id), season, episode)
 
     add(movie, seen_at, series, season, episode)
@@ -31,7 +31,8 @@ class MovieRegistry
   end
 
   def latest
-    @user.movies.last(5)
+    Hash[:movies => @user.movies.where(is_series: false).last(5),
+         :episodes => Episode.last(5)]
   end
 
   private
@@ -40,19 +41,21 @@ class MovieRegistry
   end
 
   def add(movie, at, series, season=nil, episode=nil)
+    # Do NOT use 'or'
     entity = Movie.find_by(imdb_id: idfy(movie.id)) ||
-      create_movie(movie, at)
+      create_movie(movie, at, series)
 
-    create_series(season, episode, entity) if series == 'true'
+    create_series(season, episode, entity) if series
 
     movie
   end
 
-  def create_movie(movie, seen_at)
+  def create_movie(movie, seen_at, series)
     title = movie.title.include?('"') ? movie.title[1..-2] : movie.title
 
-    Movie.create(title: title, year: movie.year,
-                 user: @user, seen_at: seen_at.to_s, imdb_id: idfy(movie.id))
+    Movie.create(title: title, year: movie.year, user: @user,
+                 seen_at: seen_at.to_s, imdb_id: idfy(movie.id),
+                 is_series: series)
   end
 
   def create_series(season, episode, movie)

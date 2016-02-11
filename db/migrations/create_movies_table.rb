@@ -9,6 +9,7 @@ class CreateMovieTable < ActiveRecord::Migration
       t.integer :year
       t.string :imdb_id
       t.string :seen_at
+      t.boolean :is_series
     end
     puts 'ran up method'
   end

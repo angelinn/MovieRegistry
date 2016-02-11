@@ -43,8 +43,9 @@ end
 
 post '/add' do
   registry = MovieRegistry.new(cookies[:username])
+
   movie = registry.add_movie(params[:id], params[:seen_at],
-                         params[:series], params[:season],
+                         (eval params[:series]), params[:season],
                          params[:episode])
 
   return redirect back unless movie
