@@ -24,10 +24,16 @@ class MovieRegistry
     series = @user.records.where(is_series: true)
 
     series.group_by { |s| s.movie_id }.map do |key, values|
-      last = values.last.episode
+      last_season = values.max_by { |r| r.episode.season }.episode.season
+      last_episode = values.max_by { |r| r.episode.episode }.episode.episode
+
+      last = values.select { |v| v.episode.season = last_season and
+          v.episode.episode = last_episode }.first
+
       movie = values.first.movie
+
       Episodes::Manager.new(movie.title, movie.imdb_id).
-        check_for_new(last.season, last.episode)
+        check_for_new(last.episode.season, last.episode.episode)
     end
   end
 

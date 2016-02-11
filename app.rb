@@ -33,7 +33,7 @@ end
 
 post '/query' do
   query = MovieDb::ImdbManager.get_by_name(params[:movie_name])
-  erb :query, :locals => { :movies => query.movies.take(10) }
+  erb :query, :locals => { :movies => query.movies.take(15) }
 end
 
 post '/login' do
