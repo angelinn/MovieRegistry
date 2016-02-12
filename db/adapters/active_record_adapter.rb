@@ -14,8 +14,8 @@ module DataAccess
       klass.where(*args)
     end
 
-    def create(entity, *args)
-      entity.create(*args)
+    def create(klass, *args)
+      klass.create(*args)
     end
 
     def update(entity)
