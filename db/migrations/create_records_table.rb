@@ -12,12 +12,6 @@ class CreateRecordTable < ActiveRecord::Migration
     end
     puts 'ran up method'
   end
-
-  def down
-    drop_table :records
-    puts 'ran down method'
-  end
-
 end
 
-CreateRecordTable.migrate(ARGV[0])
+CreateRecordTable.up

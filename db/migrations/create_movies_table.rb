@@ -10,12 +10,6 @@ class CreateMovieTable < ActiveRecord::Migration
     end
     puts 'ran up method'
   end
-
-  def down
-    drop_table :movies
-    puts 'ran down method'
-  end
-
 end
 
-CreateMovieTable.migrate(ARGV[0])
+CreateMovieTable.up

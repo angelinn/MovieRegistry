@@ -8,12 +8,6 @@ class CreateUsersTable < ActiveRecord::Migration
     end
     puts 'ran up method'
   end
-
-  def down
-    drop_table :users
-    puts 'ran down method'
-  end
-
 end
 
-CreateUsersTable.migrate(ARGV[0])
+CreateUsersTable.up

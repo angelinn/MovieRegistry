@@ -9,12 +9,6 @@ class CreateEpisodesTable < ActiveRecord::Migration
     end
     puts 'ran up method'
   end
-
-  def down
-    drop_table :episodes
-    puts 'ran down method'
-  end
-
 end
 
-CreateEpisodesTable.migrate(ARGV[0])
+CreateEpisodesTable.up

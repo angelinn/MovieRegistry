@@ -1,16 +1,14 @@
 namespace :db do
   desc "drops databases"
   task :drop do
-    ARGV = ['down']
-    require_relative 'db/migrations/create_users_table.rb'
-    require_relative 'db/migrations/create_movies_table.rb'
-    require_relative 'db/migrations/create_episodes_table.rb'
-    require_relative 'db/migrations/create_records_table.rb'
+    require_relative 'db/migrations/drop_users_table.rb'
+    require_relative 'db/migrations/drop_movies_table.rb'
+    require_relative 'db/migrations/drop_episodes_table.rb'
+    require_relative 'db/migrations/drop_records_table.rb'
   end
 
   desc "creates databases"
   task :create do
-    ARGV = ['up']
     require_relative 'db/migrations/create_users_table.rb'
     require_relative 'db/migrations/create_movies_table.rb'
     require_relative 'db/migrations/create_episodes_table.rb'
@@ -27,7 +25,8 @@ namespace :test do
     end
   end
 
-  task :run_single, :task_name do |t, arg|
-    system("rspec --fail-fast --color #{arg}_spec.rb") or exit(1)
+  task :run_single, :name do |t, arg|
+    p "#{arg}_spec.rb"
+    system('rspec --fail-fast --color #{arg}_spec.rb') or exit(1)
   end
 end
