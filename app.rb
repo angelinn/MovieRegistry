@@ -7,5 +7,5 @@ require_relative './lib/registry'
 
 not_found do
   status 404
-  erb :oops, :layout => false
+  erb :'shared/oops', :layout => false
 end

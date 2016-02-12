@@ -1,6 +1,7 @@
 get '/movie' do
   movie = MovieDb::ImdbManager.get_by_id(params[:id])
-  erb :movie, :locals => { :movie => movie, :series => params[:series] }
+  erb :'movie/movie', :locals => { :movie => movie,
+                                   :series => params[:series] }
 end
 
 post '/add' do
@@ -11,5 +12,5 @@ post '/add' do
                              params[:episode])
 
   return redirect back unless movie
-  erb :added, :locals => { :movie => movie }
+  erb :'movie/added', :locals => { :movie => movie }
 end
