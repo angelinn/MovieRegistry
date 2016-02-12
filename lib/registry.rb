@@ -1,8 +1,8 @@
 require 'date'
 
-require_relative 'imdb_manager'
 require_relative '../config/environment'
-require_relative 'episode_manager'
+require_relative 'api/imdb_manager'
+require_relative 'api/episode_manager'
 require_relative 'tools/tools'
 
 module Movies

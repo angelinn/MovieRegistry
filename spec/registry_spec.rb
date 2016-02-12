@@ -54,7 +54,7 @@ describe Movies::Registry do
   describe '#add_movie' do
     it 'adds movie and record' do
       registry = Movies::Registry.new('Angelin')
-      registry.add_movie('0413300', '2016-02-12', false)
+      registry.add_movie('0413300', '2014-01-21', false)
 
       id = Movie.find_by(title: 'Spider-Man 3').id rescue nil
       expect(id).not_to be nil
@@ -62,7 +62,7 @@ describe Movies::Registry do
       record = Record.find_by(movie_id: id)
       expect(record).not_to be nil
 
-      expect(record.seen_at).to eq '2016-02-12'
+      expect(record.seen_at).to eq '2014-01-21'
       expect(record.is_series).to be false
       expect(record.movie.title).to eq 'Spider-Man 3'
       expect(record.episode).to be nil

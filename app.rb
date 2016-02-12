@@ -3,7 +3,7 @@ require 'sinatra/cookies'
 
 require_relative './config/environment'
 require_relative './config/database'
-require_relative './lib/imdb_manager'
+require_relative './lib/api/imdb_manager'
 require_relative './lib/registry'
 
 not_found do
