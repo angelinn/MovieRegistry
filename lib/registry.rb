@@ -3,6 +3,7 @@ require 'date'
 require_relative 'imdb_manager'
 require_relative '../config/environment'
 require_relative 'episode_manager'
+require_relative 'tools/tools'
 
 module Movies
   class Registry
@@ -16,7 +17,7 @@ module Movies
       movie = MovieDb::ImdbManager.get_by_id(id)
 
       return nil if series and
-        not episode_exists?(movie.title, idfy(id), season, episode)
+        not episode_exists?(movie.title, Movies::Tools.idfy(id), season, episode)
 
       add(movie, seen_at, series, season, episode)
     end
@@ -28,8 +29,9 @@ module Movies
         last_season = values.max_by { |r| r.episode.season }.episode.season
         last_episode = values.max_by { |r| r.episode.episode }.episode.episode
 
-        last = values.select { |v| v.episode.season = last_season and
-            v.episode.episode = last_episode }.first
+        last = values.select do |v|
+          v.episode.season = last_season and v.episode.episode = last_episode
+        end.first
 
         movie = values.first.movie
 
@@ -58,10 +60,10 @@ module Movies
     end
 
     def create_movie(movie, seen_at, series)
-      title = movie.title.include?('"') ? movie.title[1..-2] : movie.title
+      title = Movies::Tools.titleify(movie.title)
 
-      Movie.find_by(imdb_id: idfy(movie.id)) ||
-        Movie.create(title: title, year: movie.year, imdb_id: idfy(movie.id))
+      Movie.find_by(imdb_id: Movies::Tools.idfy(movie.id)) ||
+        Movie.create(title: title, year: movie.year, imdb_id: Movies::Tools.idfy(movie.id))
     end
 
     def create_episode(season, episode)
@@ -70,19 +72,16 @@ module Movies
     end
 
     def create_record(movie, seen_at, episode=nil)
-      at = Date.parse(seen_at) rescue Date.parse(Time.now.to_s)
+      at = Movies::Tools.dateify(seen_at)
       id = episode ? episode.id : nil
 
       Record.find_by(user_id: @user.id, movie_id: movie.id, episode_id: id) ||
-        Record.create(user: @user, movie: movie, episode: episode, is_series: !!episode, seen_at: at.to_s)
+        Record.create(user: @user, movie: movie, episode: episode,
+                      is_series: !!episode, seen_at: at.to_s)
     end
 
     def episode_exists?(title, id, season, number)
       Episodes::TvdbManager.new(title, id).exists?(season, number)
-    end
-
-    def idfy(id)
-      "tt#{id}"
     end
   end
 end
