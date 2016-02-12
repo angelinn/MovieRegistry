@@ -1,36 +1,35 @@
-require_relative './base_repository'
-
-module DataAccess
-  module Repository
-    extend self
-
-    def all
-      BaseRepository.all(object_class)
+class Repository
+  class << self
+    def adapter
+      @adapter
     end
 
-    def find(*args)
-      BaseRepository.find(object_class, *args)
+    def adapter=(adapter)
+      @adapter = adapter
     end
 
-    def create(*args)
-      BaseRepository.create(*args)
+    def all(klass)
+      adapter.all(klass)
     end
 
-    def where(*args)
-      BaseRepository.where(object_class, *args)
+    def find(klass, *args)
+      adapter.find(klass, *args)
+    end
+
+    def where(klass, *args)
+      adapter.where(*args)
+    end
+
+    def create(klass, *args)
+      adapter.create(klass, *args)
     end
 
     def update(entity)
-      BaseRepository.update(entity)
+      adapter.update(entity)
     end
 
-    def delete(record)
-      BaseRepository.delete(record)
-    end
-
-    private
-    def object_class
-      @object_class ||= self.to_s.match(/^(.+)Repo/).first.constantize
+    def delete(entity)
+      adapter.delete(entity)
     end
   end
 end

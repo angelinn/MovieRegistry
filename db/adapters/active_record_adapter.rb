@@ -1,6 +1,5 @@
-module DataAccess
-  class ActiveRecordAdapter
-    extend self
+class ActiveRecordAdapter
+  class << self
 
     def find(klass, *args)
       klass.find_by(*args)
@@ -25,4 +24,5 @@ module DataAccess
     def delete(entity)
       entity.destroy
     end
+  end
 end

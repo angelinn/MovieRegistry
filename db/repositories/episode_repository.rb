@@ -1,7 +1,5 @@
-require_relative 'repository'
+require_relative 'concrete_repository'
 
-module DataAccess
-  class EpisodeRepository
-    extend Repository
-  end
+class EpisodeRepository
+  extend Repository::Concrete
 end

@@ -1,7 +1,6 @@
-require_relative 'repository'
+require_relative 'concrete_repository'
 
-module DataAccess
-  class UserRepository
-    extend Repository
-  end
+
+class UserRepository
+  extend Repository::Concrete
 end

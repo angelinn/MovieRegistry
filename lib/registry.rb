@@ -64,21 +64,21 @@ module Movies
       title = Movies::Tools.titleify(movie.title)
       id = Movies::Tools.idfy(movie.id)
 
-      Movie.find_by(imdb_id: Movies::Tools.idfy(movie.id)) ||
-        Movie.create(title: title, year: movie.year, imdb_id: id)
+      MovieRepository.find(imdb_id: Movies::Tools.idfy(movie.id)) ||
+        MovieRepository.create(title: title, year: movie.year, imdb_id: id)
     end
 
     def create_episode(season, episode)
-      Episode.find_by(season: season, episode: episode) ||
-        Episode.create(season: season, episode: episode)
+      EpisodeRepository.find(season: season, episode: episode) ||
+        EpisodeRepository.create(season: season, episode: episode)
     end
 
     def create_record(movie, seen_at, episode=nil)
       at = Movies::Tools.dateify(seen_at).to_s
       id = episode ? episode.id : nil
 
-      Record.find_by(user_id: @user.id, movie_id: movie.id, episode_id: id) ||
-        Record.create(user: @user, movie: movie, episode: episode,
+      RecordRepository.find(user_id: @user.id, movie_id: movie.id, episode_id: id) ||
+        RecordRepository.create(user: @user, movie: movie, episode: episode,
                       is_series: !!episode, seen_at: at)
     end
 

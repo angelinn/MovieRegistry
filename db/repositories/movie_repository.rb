@@ -1,7 +1,5 @@
-require_relative 'repository'
+require_relative 'concrete_repository'
 
-module DataAccess
-  class MovieRepository
-    extend Repository
-  end
+class MovieRepository
+  extend Repository::Concrete
 end
