@@ -27,7 +27,7 @@ namespace :tests do
   desc 'runs tests'
 
   task :run_single, :name do |t, arg|
-    system('rspec --fail-fast --color #{arg}_spec.rb') or exit(1)
+    system("rspec --fail-fast --color #{arg}_spec.rb") or exit(1)
   end
 end
 
