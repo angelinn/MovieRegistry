@@ -29,3 +29,7 @@ namespace :tests do
     system('rspec --fail-fast --color #{arg}_spec.rb') or exit(1)
   end
 end
+
+task :default do
+  Rake::Task['test'].execute
+end
