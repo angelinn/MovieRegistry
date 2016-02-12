@@ -2,7 +2,7 @@ require_relative '../../config/environment'
 
 class CreateEpisodesTable < ActiveRecord::Migration
 
-  def up
+  def self.up
     create_table :episodes do |t|
       t.integer :season
       t.integer :episode

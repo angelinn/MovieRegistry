@@ -2,14 +2,12 @@ require 'tvdb_party'
 require 'date'
 
 module Episodes
-  class Manager
+  class TvdbManager
     API_KEY = '51AEE5CAE610F84E'
 
     def initialize(title, imdb_id)
-      @tvdb = TvdbParty::Search.new(API_KEY)
-
-      local = @tvdb.search(title).select { |r| r['IMDB_ID'] == imdb_id }.first
-      @series = @tvdb.get_series_by_id(local['seriesid'])
+      @title = title
+      @imdb_id = imdb_id
     end
 
     def check_for_new(last_season, last_number)
@@ -30,11 +28,19 @@ module Episodes
 
     private
     def all
+      load
       @tvdb.get_all_episodes(@series)
     end
 
     def has_finished?(season, number)
       @episodes.sort { |a, b| a.season_number <=> b.season_number }.last.number == number.to_s
+    end
+
+    def load
+      @tvdb = TvdbParty::Search.new(API_KEY)
+
+      got = @tvdb.search(@title).select { |r| r['IMDB_ID'] == @imdb_id }.first
+      @series = @tvdb.get_series_by_id(got['seriesid'])
     end
   end
 end

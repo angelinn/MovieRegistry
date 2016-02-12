@@ -22,6 +22,7 @@ class MovieRegistry
 
   def check_for_new
     series = @user.records.where(is_series: true)
+    p series
 
     series.group_by { |s| s.movie_id }.map do |key, values|
       last_season = values.max_by { |r| r.episode.season }.episode.season
@@ -32,7 +33,7 @@ class MovieRegistry
 
       movie = values.first.movie
 
-      Episodes::Manager.new(movie.title, movie.imdb_id).
+      Episodes::TvdbManager.new(movie.title, movie.imdb_id).
         check_for_new(last.episode.season, last.episode.episode)
     end
   end
@@ -77,7 +78,7 @@ class MovieRegistry
   end
 
   def episode_exists?(title, id, season, number)
-    Episodes::Manager.new(title, id).exists?(season, number)
+    Episodes::TvdbManager.new(title, id).exists?(season, number)
   end
 
   def idfy(id)

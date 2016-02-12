@@ -2,7 +2,7 @@ require_relative '../../config/environment'
 
 class CreateMovieTable < ActiveRecord::Migration
 
-  def up
+  def self.up
     create_table :movies do |t|
       t.string  :title
       t.integer :year

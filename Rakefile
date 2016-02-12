@@ -26,7 +26,6 @@ namespace :test do
   end
 
   task :run_single, :name do |t, arg|
-    p "#{arg}_spec.rb"
     system('rspec --fail-fast --color #{arg}_spec.rb') or exit(1)
   end
 end

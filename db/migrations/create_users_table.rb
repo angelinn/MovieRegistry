@@ -2,7 +2,7 @@ require_relative '../../config/environment'
 
 class CreateUsersTable < ActiveRecord::Migration
 
-  def up
+  def self.up
     create_table :users do |t|
       t.string :name
     end

@@ -1,7 +1,7 @@
 require_relative '../../config/environment'
 
 class DropRecordsTable < ActiveRecord::Migration
-  def down
+  def self.down
     drop_table :records
     puts 'ran down method'
   end
