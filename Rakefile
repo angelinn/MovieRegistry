@@ -16,14 +16,14 @@ namespace :db do
   end
 end
 
-namespace :test do
-  desc 'runs tests'
-
-  task :run do
-    Dir.glob('%s/spec/*.rb' % Dir.pwd).each do |file|
-      Rake::Task['test:run_single'].execute file[0..-9]
-    end
+task :test do
+  Dir.glob('%s/spec/*.rb' % Dir.pwd).each do |file|
+    Rake::Task['tests:run_single'].execute file[0..-9]
   end
+end
+
+namespace :tests do
+  desc 'runs tests'
 
   task :run_single, :name do |t, arg|
     system('rspec --fail-fast --color #{arg}_spec.rb') or exit(1)
