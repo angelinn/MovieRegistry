@@ -16,8 +16,9 @@ module Movies
     def add_movie(id, seen_at, series, season=nil, episode=nil)
       movie = MovieDb::ImdbManager.get_by_id(id)
 
+      imdb_id = Movies::Tools.idfy(id)
       return nil if series and
-        not episode_exists?(movie.title, Movies::Tools.idfy(id), season, episode)
+        not episode_exists?(movie.title, imdb_id, season, episode)
 
       add(movie, seen_at, series, season, episode)
     end
@@ -61,9 +62,10 @@ module Movies
 
     def create_movie(movie, seen_at, series)
       title = Movies::Tools.titleify(movie.title)
+      id = Movies::Tools.idfy(movie.id)
 
       Movie.find_by(imdb_id: Movies::Tools.idfy(movie.id)) ||
-        Movie.create(title: title, year: movie.year, imdb_id: Movies::Tools.idfy(movie.id))
+        Movie.create(title: title, year: movie.year, imdb_id: id)
     end
 
     def create_episode(season, episode)
@@ -72,12 +74,12 @@ module Movies
     end
 
     def create_record(movie, seen_at, episode=nil)
-      at = Movies::Tools.dateify(seen_at)
+      at = Movies::Tools.dateify(seen_at).to_s
       id = episode ? episode.id : nil
 
       Record.find_by(user_id: @user.id, movie_id: movie.id, episode_id: id) ||
         Record.create(user: @user, movie: movie, episode: episode,
-                      is_series: !!episode, seen_at: at.to_s)
+                      is_series: !!episode, seen_at: at)
     end
 
     def episode_exists?(title, id, season, number)

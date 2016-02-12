@@ -1,5 +1,4 @@
 require_relative '../lib/registry'
-require_relative '../lib/episode_manager'
 require_relative '../config/database_test'
 require_relative '../config/rspec'
 
