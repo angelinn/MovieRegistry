@@ -23,5 +23,15 @@ describe Episodes::TvdbManager do
       manager = Episodes::TvdbManager.new('The 4400', 'tt0389564')
       expect(manager.check_for_new('4', '11')[:new_episodes].count).to be 2
     end
+
+    # it 'returns nil if incorrect episode is entered' do
+    #   manager = Episodes::TvdbManager.new('The 4400', 'tt0389564')
+    #   expect(manager.check_for_new('4', '43')[:new_episodes]).to be nil
+    # end
+
+    # it 'returns nil if incorrect season is entered' do
+    #   manager = Episodes::TvdbManager.new('The 4400', 'tt0389564')
+    #   expect(manager.check_for_new('143', '11')[:new_episodes]).to be nil
+    # end
   end
 end
