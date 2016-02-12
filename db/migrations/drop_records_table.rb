@@ -7,4 +7,4 @@ class DropRecordsTable < ActiveRecord::Migration
   end
 end
 
-DropRecordsTable.migrate(ARGV[0])
+DropRecordsTable.down

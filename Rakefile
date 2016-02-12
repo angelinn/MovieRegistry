@@ -1,5 +1,9 @@
 namespace :db do
   desc "drops databases"
+
+  require 'active_record'
+  require_relative 'config/database'
+
   task :drop do
     require_relative 'db/migrations/drop_users_table.rb'
     require_relative 'db/migrations/drop_movies_table.rb'
@@ -9,7 +13,6 @@ namespace :db do
 
   desc "creates databases"
   task :create do
-    p 'YEEEEAH'
     require_relative 'db/migrations/create_users_table.rb'
     require_relative 'db/migrations/create_movies_table.rb'
     require_relative 'db/migrations/create_episodes_table.rb'
