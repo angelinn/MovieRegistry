@@ -4,7 +4,7 @@ Dir.glob('%s/routes/*.rb' % Dir.pwd).each do |file|
   require_relative file
 end
 
-Dir.glob('%s/db/entities/*.rb' % Dir.pwd).each do |file|
+Dir.glob('%s/models/*.rb' % Dir.pwd).each do |file|
   require_relative file
 end
 
