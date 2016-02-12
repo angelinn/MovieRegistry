@@ -1,12 +1,8 @@
 require 'sinatra'
 require 'sinatra/cookies'
 
-ActiveRecord::Base.establish_connection(
-  :adapter  => 'sqlite3',
-  :database => 'movie_registry.db'
-)
-
 require_relative './config/environment'
+require_relative './config/database'
 require_relative './lib/imdb_manager'
 require_relative './lib/registry'
 

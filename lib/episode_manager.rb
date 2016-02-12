@@ -14,8 +14,9 @@ module Episodes
       @episodes = all
       return nil if has_finished?(last_season, last_number)
 
-      @episodes
-      current = @episodes.select { |e| e.season_number == last_season.to_s and e.number == last_number.to_s }.first
+      current = @episodes.select do |e|
+        e.season_number == last_season.to_s and e.number == last_number.to_s
+      end.first
 
       Hash[:title => @series.name, :new_episodes =>
           @episodes.select { |e| e.air_date and e.air_date > current.air_date and e.air_date < Date.parse(Time.new.to_s) }
@@ -28,7 +29,7 @@ module Episodes
 
     private
     def all
-      load
+      @series = load
       @tvdb.get_all_episodes(@series)
     end
 
@@ -40,7 +41,7 @@ module Episodes
       @tvdb = TvdbParty::Search.new(API_KEY)
 
       got = @tvdb.search(@title).select { |r| r['IMDB_ID'] == @imdb_id }.first
-      @series = @tvdb.get_series_by_id(got['seriesid'])
+      @tvdb.get_series_by_id(got['seriesid'])
     end
   end
 end

@@ -5,8 +5,8 @@ end
 get '/index' do
   erb :'home/index', :locals => {
     :username     => cookies[:username],
-    :latest       => MovieRegistry.new(cookies[:username]).latest,
-    :new_episodes => MovieRegistry.new(cookies[:username]).check_for_new
+    :latest       => Movies::Registry.new(cookies[:username]).latest,
+    :new_episodes => Movies::Registry.new(cookies[:username]).check_for_new
   }
 end
 

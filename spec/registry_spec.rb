@@ -1,31 +1,12 @@
-require 'rake'
-
-require 'sinatra'
 require_relative '../lib/registry'
 require_relative '../lib/episode_manager'
+require_relative '../config/database_test'
+require_relative '../config/rspec'
+
+require 'rake'
 require 'database_cleaner'
 
-ActiveRecord::Base.establish_connection(
-  :adapter  => 'sqlite3',
-  :database => 'movie_registry_test.db'
-)
-
-RSpec.configure do |config|
-
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-
-end
-
-describe MovieRegistry do
+describe Movies::Registry do
 
   before :all do
     require_relative '../db/migrations/create_users_table.rb'
@@ -57,22 +38,22 @@ describe MovieRegistry do
     it 'adds user to the database' do
 
       name = 'Angelin'
-      MovieRegistry.new(name)
+      Movies::Registry.new(name)
 
       expect(User.find_by(name: name).name).to eq name
     end
 
     it 'does not add second user with the same name' do
       name = 'Angelin'
-      MovieRegistry.new(name)
-      MovieRegistry.new(name)
+      Movies::Registry.new(name)
+      Movies::Registry.new(name)
       expect(User.where(name: name).count).to be 1
     end
   end
 
   describe '#add_movie' do
     it 'adds movie and record' do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
       registry.add_movie('0413300', '2016-02-12', false)
 
       id = Movie.find_by(title: 'Spider-Man 3').id rescue nil
@@ -89,7 +70,7 @@ describe MovieRegistry do
     end
 
     it 'does not duplicate movie' do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
       registry.add_movie('0413300', '2016-02-12', false)
       registry.add_movie('0413300', '2016-02-12', false)
 
@@ -99,7 +80,7 @@ describe MovieRegistry do
 
   describe '#check_for_new' do
     it 'returns false when there are no new' do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
       registry.add_movie('0389564', '2016-02-12', true, 4, 13)
 
       allow_any_instance_of(Episodes::TvdbManager).
@@ -111,7 +92,7 @@ describe MovieRegistry do
     end
 
     it 'returns episodes when there are new ones' do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
       registry.add_movie('0389564', '2016-02-12', true, 4, 11)
 
       allow_any_instance_of(Episodes::TvdbManager).
@@ -125,7 +106,7 @@ describe MovieRegistry do
 
   describe '#latest' do
     it 'returns latest movies in correct order', :skip_before do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
 
       smn = M.new('Spider-Man 3', 2007, '0413300')
       inv = M.new('The Invincible', 2005, '3214034')
@@ -144,7 +125,7 @@ describe MovieRegistry do
     end
 
     it 'returns latest series in correct order', :skip_before do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
 
       smn = M.new('4400', 2007, '0415300')
       inv = M.new('The Vampire Diaries', 2005, '3244034')
@@ -163,12 +144,12 @@ describe MovieRegistry do
     end
 
     it 'returns [] when there are no movies', :skip_before do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
       expect(registry.latest[:movies]).to eq []
     end
 
     it 'returns [] when there are no episodes', :skip_before do
-      registry = MovieRegistry.new('Angelin')
+      registry = Movies::Registry.new('Angelin')
       expect(registry.latest[:episodes]).to eq []
     end
   end

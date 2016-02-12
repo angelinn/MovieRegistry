@@ -9,6 +9,7 @@ namespace :db do
 
   desc "creates databases"
   task :create do
+    p 'YEEEEAH'
     require_relative 'db/migrations/create_users_table.rb'
     require_relative 'db/migrations/create_movies_table.rb'
     require_relative 'db/migrations/create_episodes_table.rb'

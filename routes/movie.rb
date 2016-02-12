@@ -5,7 +5,7 @@ get '/movie' do
 end
 
 post '/add' do
-  registry = MovieRegistry.new(cookies[:username])
+  registry = Movies::Registry.new(cookies[:username])
 
   movie = registry.add_movie(params[:id], params[:seen_at],
                              (eval params[:series]), params[:season],
