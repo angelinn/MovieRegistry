@@ -18,9 +18,12 @@ module Episodes
         e.season_number == last_season.to_s and e.number == last_number.to_s
       end.first
 
-      Hash[:title => @series.name, :new_episodes =>
-          @episodes.select { |e| e.air_date and e.air_date > current.air_date and e.air_date < Date.parse(Time.new.to_s) }
-      ]
+      new_episodes = @episodes.select do |e|
+                       e.air_date and e.air_date > current.air_date and
+                         e.air_date < Date.parse(Time.new.to_s)
+                     end
+
+      Hash[:title => @series.name, :new_episodes => new_episodes]
     end
 
     def exists?(season, number)
@@ -34,7 +37,9 @@ module Episodes
     end
 
     def has_finished?(season, number)
-      @episodes.sort { |a, b| a.season_number <=> b.season_number }.last.number == number.to_s
+      @episodes.sort { |a, b| a.season_number <=> b.season_number }.
+        last.
+        number == number.to_s
     end
 
     def load
