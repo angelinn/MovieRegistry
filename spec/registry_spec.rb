@@ -3,11 +3,27 @@ require 'rake'
 require 'sinatra'
 require_relative '../lib/registry'
 require_relative '../lib/episode_manager'
+require 'database_cleaner'
 
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
   :database => 'movie_registry_test.db'
 )
+
+RSpec.configure do |config|
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+
+end
 
 describe MovieRegistry do
 
@@ -16,18 +32,25 @@ describe MovieRegistry do
     require_relative '../db/migrations/create_movies_table.rb'
     require_relative '../db/migrations/create_episodes_table.rb'
     require_relative '../db/migrations/create_records_table.rb'
+
+    class M < Struct.new(:title, :year, :id)
+    end
   end
 
   after :all do
     system('rm ./movie_registry_test.db')
   end
 
-  before :each do
+  before :each do |example|
     allow_any_instance_of(Episodes::TvdbManager).
       to receive(:exists?).
       and_return(true)
 
-
+    unless example.metadata[:skip_before]
+      allow(MovieDb::ImdbManager).
+        to receive(:get_by_id).
+        and_return(M.new('Spider-Man 3', 2007, '0413300'))
+      end
   end
 
   describe '#add_user' do
@@ -97,6 +120,56 @@ describe MovieRegistry do
 
       expect(registry.check_for_new.count).to be 1
       expect(registry.check_for_new.first).to be true
+    end
+  end
+
+  describe '#latest' do
+    it 'returns latest movies in correct order', :skip_before do
+      registry = MovieRegistry.new('Angelin')
+
+      smn = M.new('Spider-Man 3', 2007, '0413300')
+      inv = M.new('The Invincible', 2005, '3214034')
+      exp = M.new('The Expendables 2', 2012, '0000000')
+
+      allow(MovieDb::ImdbManager).
+        to receive(:get_by_id).
+        and_return(smn, inv, exp)
+
+      registry.add_movie(nil, nil, nil)
+      registry.add_movie(nil, nil, nil)
+      registry.add_movie(nil, nil, nil)
+
+      expect(registry.latest[:movies].map { |m| m.movie.title}).
+        to eq [smn, inv, exp].map { |m| m.title }
+    end
+
+    it 'returns latest series in correct order', :skip_before do
+      registry = MovieRegistry.new('Angelin')
+
+      smn = M.new('4400', 2007, '0415300')
+      inv = M.new('The Vampire Diaries', 2005, '3244034')
+      exp = M.new('Tom and Jerry', 2012, '0100000')
+
+      allow(MovieDb::ImdbManager).
+        to receive(:get_by_id).
+        and_return(smn, inv, exp)
+
+      registry.add_movie(nil, nil, true, 1, 1)
+      registry.add_movie(nil, nil, true, 1, 1)
+      registry.add_movie(nil, nil, true, 1, 1)
+
+      expect(registry.latest[:episodes].map { |m| m.movie.title }.last(3)).
+        to eq [smn, inv, exp].map { |m| m.title }
+    end
+
+    it 'returns [] when there are no movies', :skip_before do
+      registry = MovieRegistry.new('Angelin')
+      expect(registry.latest[:movies]).to eq []
+    end
+
+    it 'returns [] when there are no episodes', :skip_before do
+      registry = MovieRegistry.new('Angelin')
+      expect(registry.latest[:episodes]).to eq []
     end
   end
 end
