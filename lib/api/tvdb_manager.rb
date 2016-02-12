@@ -18,6 +18,7 @@ module Episodes
         e.season_number == last_season.to_s and e.number == last_number.to_s
       end.first
 
+      return nil unless current
       new_episodes = @episodes.select do |e|
                        e.air_date and e.air_date > current.air_date and
                          e.air_date < Date.parse(Time.new.to_s)
