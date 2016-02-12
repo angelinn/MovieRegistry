@@ -1,0 +1,43 @@
+<h2> Edit record </h2>
+<hr />
+
+<div class="row">
+  <form action="<%= rec ? '/edit' : '/browse' %>" method="post" class="form-vertical col-md-4">
+  <h3> Enter data: </h3>
+  <hr />
+    <div class="form-group">
+      <h4> Type </h4>
+
+      <select class="form-control">
+        <option <%= 'selected="selected"' if type == 'movie' %> value="movie"> Movie </option>
+        <option <%= 'selected="selected"' if type == 'series' %> value="series"> TV Show </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="title"
+             value="<%=  rec ? rec.movie.title : 'Title' %>"
+             <%= rec ? 'readonly="readonly"' : '' %> />
+    </div>
+
+    <% if type == 'series' %>
+    <div class="form-group">
+      <input type="text" class="form-control" name="season"
+             value="<%= rec ? rec.episode.season : 'Season' %>"
+             <%= rec ? 'readonly="readonly"' : '' %> />
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="season"
+             value="<%= rec ? rec.episode.episode : 'Episode number' %>"
+             <%= rec ? 'readonly="readonly"' : '' %> />
+    </div>
+    <% end %>
+
+    <div class="form-group">
+      <input type="<%= rec ? 'input' : 'hidden' %>" class="form-control" name="seen_at" value="<%= rec.seen_at rescue nil %>" />
+    </div>
+
+    <button type="submit" class="btn btn-blank">Advance!</button>
+  </form>
+</div>
