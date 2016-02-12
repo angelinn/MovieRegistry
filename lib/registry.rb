@@ -2,7 +2,7 @@ require 'date'
 
 require_relative '../config/environment'
 require_relative 'api/imdb_manager'
-require_relative 'api/episode_manager'
+require_relative 'api/tvdb_manager'
 require_relative 'tools/tools'
 
 module Movies
@@ -48,7 +48,7 @@ module Movies
 
     private
     def add_user(name)
-      User.find_by(name: name) || User.create(name: name)
+      UserRepository.find(name: name) || UserRepository.create(name: name)
     end
 
     def add(movie, at, series, season=nil, episode=nil)
@@ -77,9 +77,11 @@ module Movies
       at = Movies::Tools.dateify(seen_at).to_s
       id = episode ? episode.id : nil
 
-      RecordRepository.find(user_id: @user.id, movie_id: movie.id, episode_id: id) ||
-        RecordRepository.create(user: @user, movie: movie, episode: episode,
-                      is_series: !!episode, seen_at: at)
+      find_arg = Hash[:user_id, @user.id, :movie_id, movie.id, :episode_id, id]
+      create_arg = Hash[:user, @user, :movie, movie, :episode, episode,
+                        :is_series, !!episode, :seen_at, at]
+
+      RecordRepository.find(find_arg) || RecordRepository.create(create_arg)
     end
 
     def episode_exists?(title, id, season, number)
