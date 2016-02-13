@@ -17,7 +17,7 @@ class Repository
     end
 
     def where(klass, *args)
-      adapter.where(*args)
+      adapter.where(klass, *args)
     end
 
     def create(klass, *args)

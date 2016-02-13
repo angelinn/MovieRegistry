@@ -23,15 +23,14 @@ get '/edit' do
 end
 
 post '/browse' do
-  rec = Records::Manager.get(params[:title], params[:season], params[:episode])
+  rec = Records::Manager.get(cookies[:username], params[:title], params[:season], params[:episode])
 
   redirect '/edit' unless rec
-
   erb :'movie/edit', :locals => { :rec => rec, :type => params[:type] }
 end
 
 post '/edit' do
-  rec = Records::Manager.edit(params[:title],  params[:seen_at],
+  rec = Records::Manager.edit(cookies[:username], params[:title],  params[:seen_at],
                               params[:season], params[:episode])
 
   entry = params[:type] || 'movie'
@@ -44,14 +43,22 @@ get '/seen' do
 end
 
 post '/seen' do
-  rec = Records::Manager.get(params[:title], params[:season], params[:episode])
+  rec = Records::Manager.get(cookies[:username], params[:title], params[:season], params[:episode])
 
-  unless rec
-    message = 'You have not seen this one!'
-    return erb :result, :locals => { :message => message }
-  end
-
-  message = "You have seen #{rec.movie.title} on #{rec.seen_at}"
-  erb :result, :locals => { :message => message }
+  error = 'You have not seen this one!'
+  message = "You have seen #{rec.movie.title} on #{rec.seen_at}" rescue nil
+  erb :result, :locals => { :message => rec ? message : error }
 end
 
+get '/last' do
+  erb :'movie/last'
+end
+
+post '/last' do
+  episode = Records::Manager.get_last_episode(cookies[:username], params[:title])
+  message = "The last episode of #{params[:title]}, you have seen is \
+             Season: #{episode.season}, Episode: #{episode.episode}." rescue nil
+
+  error = 'You have not seen any episodes of this TV Show.'
+  erb :result, :locals => { :message => episode ? message : error}
+end
