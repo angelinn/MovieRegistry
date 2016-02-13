@@ -37,3 +37,21 @@ post '/edit' do
   entry = params[:type] || 'movie'
   erb :'movie/edit', :locals => { :rec => nil, :type => entry }
 end
+
+get '/seen' do
+  entry = params[:type] || 'movie'
+  erb :'movie/seen', :locals => { :type => entry }
+end
+
+post '/seen' do
+  rec = Records::Manager.get(params[:title], params[:season], params[:episode])
+
+  unless rec
+    message = 'You have not seen this one!'
+    return erb :result, :locals => { :message => message }
+  end
+
+  message = "You have seen #{rec.movie.title} on #{rec.seen_at}"
+  erb :result, :locals => { :message => message }
+end
+

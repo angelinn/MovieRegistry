@@ -52,7 +52,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script>
 $('select').on('change', function() {
-  window.location.href = '/edit?type=' + this.value;
+  var href = window.location.href;
+  var last;
+  if (href.indexOf('?') != -1)
+    last = href.substr(href.lastIndexOf('/'),
+                      href.indexOf('?') - href.lastIndexOf('/'));
+  else
+    last = href.substr(href.lastIndexOf('/'));
+
+  window.location.href = last + '?type=' + this.value;
 });
 </script>
 </body>
