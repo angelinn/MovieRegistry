@@ -11,6 +11,7 @@ You can
   - edit entries
   - check the dates on which you have watched something
   - can be used by multiple users
+  - aaaaand be notified when a new episode of your favourite show is up!
 
   
   
