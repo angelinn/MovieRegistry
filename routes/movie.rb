@@ -15,7 +15,7 @@ post '/add' do
 
   movie = registry.add_movie(*args)
 
-  return erb :result, :locals => { :message => 'Wrong data!' }
+  return erb :result, :locals => { :message => 'Wrong data!' } unless movie
   erb :'movie/added', :locals => { :movie => movie }
 end
 
