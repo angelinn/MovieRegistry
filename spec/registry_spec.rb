@@ -2,7 +2,6 @@ require_relative '../lib/registry'
 require_relative '../config/database_test'
 require_relative '../config/rspec'
 
-require 'rake'
 require 'database_cleaner'
 
 describe Movies::Registry do
