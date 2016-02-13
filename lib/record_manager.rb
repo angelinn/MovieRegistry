@@ -30,8 +30,10 @@ module Records
       serie = RecordRepository.where(user: user, movie: movie, is_series: true)
 
       last_season = serie.max_by { |r| r.episode.season }.episode.season
-      last_episode = serie.max_by { |r| r.episode.episode }.episode.episode
+      last_episode = serie.select { |s| s.episode.season == last_season }.
+        max_by { |r| r.episode.episode }.episode.episode
 
+      p EpisodeRepository.all
       EpisodeRepository.find(season: last_season, episode: last_episode)
     end
 
