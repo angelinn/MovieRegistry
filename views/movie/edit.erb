@@ -2,7 +2,9 @@
 <hr />
 
 <div class="row">
-  <form action="<%= rec ? '/edit' : '/browse' %>" method="post" class="form-vertical col-md-4">
+  <form action="<%= rec ? '/edit' : '/browse' %>" method="post"
+        class="form-vertical col-md-4">
+
   <h3> Enter data: </h3>
   <hr />
     <div class="form-group">
@@ -28,7 +30,7 @@
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" name="season"
+      <input type="text" class="form-control" name="episode"
              value="<%= rec ? rec.episode.episode : 'Episode number' %>"
              <%= rec ? 'readonly="readonly"' : '' %> />
     </div>
